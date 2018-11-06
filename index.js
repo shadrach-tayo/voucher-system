@@ -23,9 +23,9 @@ app.use(
     keys: [keys.cookieKey]
   })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
 
 app.get('/', (req, res) => {

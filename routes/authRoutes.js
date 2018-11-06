@@ -10,13 +10,19 @@ module.exports = app => {
   }));
 
   app.get('/auth/google/callback', 
-    passport.authenticate('google', {failureRedirect: '/login'}),
+    passport.authenticate('google', {failureRedirect: '/'}),
     (req, res) => {
       res.redirect('/dashboard');
     }
   );
 
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+  })
+
   app.get('/current_user', (req, res) => {
+    console.log(req.user);
     res.send(req.user);
   })
 

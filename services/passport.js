@@ -8,13 +8,14 @@ const User = mongoose.model('users');
 // serialize user 
 passport.serializeUser((user, done) => {
   console.log(user);
-  done(null, user);
+  done(null, user.id);
 });
 
 // deserialize user
-passport.deserializeUser((user, done) => {
-  console.log(user);
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  console.log(id);
+  User.findById(id)
+    .then(user => done(null, user));
 })
 
 // config for the google strategy when authentication using google
@@ -29,15 +30,15 @@ passport.use(new GoogleStrategy({
       .then(existingUser => {
         if(existingUser) {
           // user already exits
-          console.log(existingUser);
+          done(null, existingUser);
         } else {
           console.log(profile);
           new User({
             googleId: profile.id
-          }).save();
+          }).save()
+            .then(user => done(null, user))
         }
       })
     
-    // done(null, profile);
   }
 ));
