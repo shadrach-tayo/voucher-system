@@ -1,0 +1,18 @@
+.login-card {
+  width: 300px;
+  max-width: 300px;
+  min-height: 300px;
+  margin: 20px auto;
+  padding:  5px 10px;
+  background: white;
+  box-shadow: 0 1px 10px 2px rgba(0, 0, 0, .3);
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+}

@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+const cors = require('cors');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('./config/keys');
 
-
+app.use(cors());
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -15,6 +17,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
 
 // require authentication routing handler
 // and plug into express app instance
@@ -36,7 +39,7 @@ passport.deserializeUser((user, done) => {
 passport.use(new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
-  callbackURL: '/auth/google/callback',
+  callbackURL: '/dashboard',
   proxy: true
 }, (accessToken, refreshToken, profile, done) => {
   console.log('accessToken: ', accessToken);
