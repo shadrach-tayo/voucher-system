@@ -1,11 +1,20 @@
 const express = require('express');
-const app = express();
 const path = require('path');
 const cors = require('cors');
-const passport = require('passport');
 const cookieSession = require('cookie-session');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('./config/keys');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const app = express();
+
+// require authentication routing handler
+// and plug into express app instance
+require('./routes/authRoutes')(app);
+require('./models/User');
+require('./services/passport');
+
+// connect mongoose to our mongodb instance
+mongoose.connect(keys.mongoURI);
 
 app.use(cors());
 app.use(
@@ -18,37 +27,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
-
-// require authentication routing handler
-// and plug into express app instance
-require('./routes/authRoutes')(app);
-
-// serialize user 
-passport.serializeUser((user, done) => {
-  console.log(user);
-  done(null, user);
-});
-
-// deserialize user
-passport.deserializeUser((user, done) => {
-  console.log(user);
-  done(null, user);
-})
-
-// config for the google strategy when authentication using google
-passport.use(new GoogleStrategy({
-  clientID: keys.googleClientID,
-  clientSecret: keys.googleClientSecret,
-  callbackURL: '/dashboard',
-  proxy: true
-}, (accessToken, refreshToken, profile, done) => {
-  console.log('accessToken: ', accessToken);
-  console.log('refreshToken: ', refreshToken);
-  console.log('profile: ', profile);
-  done(null, profile);
-}
-));
-
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Voucher system</h1>')
