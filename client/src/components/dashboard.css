@@ -1,0 +1,31 @@
+body {
+  background: white;
+}
+
+.container {
+  padding: 20px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  grid-gap: 20px;
+  justify-items: center;
+}
+
+.detail-card {
+  padding: 5px;
+  background: white;
+  box-shadow: 0 2px 20px 2px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: purple;
+}
+
+.item-list {
+
+}
