@@ -6,6 +6,7 @@ const keys = require('./config/keys');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const app = express();
+app.use(passport.initialize());
 
 // require authentication routing handler
 // and plug into express app instance
@@ -23,7 +24,6 @@ app.use(
     keys: [keys.cookieKey]
   })
 );
-app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
