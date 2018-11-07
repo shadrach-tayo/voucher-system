@@ -14,24 +14,24 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className="container">
-        <section className="details">
-          <div className="detail-card"><span className="detail-title">Name :</span> {this.state.user.displayName}</div>
-          <div className="detail-card"><span className="detail-title">Email :</span> {this.state.user.email}</div>
+      <div className="">
+        <section className="details user-details">
+          <div className="user-detail-card"><span className="user-detail-title">Name :</span> {this.state.user.displayName}</div>
+          <div className="user-detail-card"><span className="user-detail-title">Email :</span> {this.state.user.email}</div>
         </section>
         <section className="item-list">
-          <h1>List of Purchased Vouchers:</h1>
+          <h1>Featured vouchers</h1>
           <div className="details">
             <div className="detail-card">
-              <h4>#100 voucher</h4>
+              <h4 className="voucher-name">#100 voucher</h4>
               <p className="purchased">Purchased</p>
             </div>
             <div className="detail-card">
-              <h4>#500 voucher</h4>
+              <h4 className="voucher-name">#500 voucher</h4>
               <p className="purchased">Purchased</p>
             </div>
             <div className="detail-card">
-              <h4>#1000 voucher</h4>
+              <h4 className="voucher-name">#1000 voucher</h4>
               <p className="purchased">Purchased</p>
             </div>
           </div>

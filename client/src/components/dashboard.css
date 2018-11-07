@@ -8,13 +8,20 @@ body {
 
 .details {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-auto-rows: 1fr;
-  grid-gap: 20px;
+  grid-gap: 10px;
   justify-items: center;
+  box-sizing: border-box;
 }
 
-.detail-card {
+.user-details {
+  padding: 20px;
+  background: #ccc;
+}
+
+.detail-card,
+.user-detail-card {
   padding: 5px;
   background: white;
   box-shadow: 0 2px 20px 2px rgba(0, 0, 0, 0.2);
@@ -24,8 +31,20 @@ body {
   font-size: 1rem;
   font-weight: 500;
   color: purple;
+  cursor: pointer;
+  transition: all .2s;
 }
 
-.item-list {
+.detail-card {
+  min-height: 250px;
+  min-width: 200px;
+}
 
+.detail-card:hover,
+.user-detail-card:hover {
+  box-shadow: 0 1px 25px 2px rgba(147, 15, 187, 0.2);
+}
+
+.voucher-name {
+  font-size: 1rem;
 }

@@ -19,8 +19,9 @@ module.exports = app => {
   );
 
   app.get('/api/logout', (req, res) => {
+    console.log(req.user);
     req.logout();
-    res.send(req.user);
+    res.redirect('/')
   })
 
   app.get('/api/current_user', (req, res) => {
@@ -29,6 +30,7 @@ module.exports = app => {
   })
 
   app.get('/dashboard', (req, res) => {
+    console.log(req.user);
     res.send(req.user);
   })
 }
