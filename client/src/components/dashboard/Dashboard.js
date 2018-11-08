@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import './dashboard.css';
+import vouchers from '../../data/voucher.js';
+import Voucher from '../voucher/Voucher';
 
 class Dashboard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log(props)
     this.state = {
       user: {
         displayName: 'shadrach',
         email: 'shadrachtemitayo@gmail.com'
-      }
+      },
+      vouchers
     }
+  }
+
+  componentDidMount() {
+    console.log(this.state);
   }
 
   render() {
@@ -19,21 +27,14 @@ class Dashboard extends Component {
           <div className="user-detail-card"><span className="user-detail-title">Name :</span> {this.state.user.displayName}</div>
           <div className="user-detail-card"><span className="user-detail-title">Email :</span> {this.state.user.email}</div>
         </section>
-        <section className="item-list">
+        <section className="voucher-list">
           <h1>Featured vouchers</h1>
           <div className="details">
-            <div className="detail-card">
-              <h4 className="voucher-name">#100 voucher</h4>
-              <p className="purchased">Purchased</p>
-            </div>
-            <div className="detail-card">
-              <h4 className="voucher-name">#500 voucher</h4>
-              <p className="purchased">Purchased</p>
-            </div>
-            <div className="detail-card">
-              <h4 className="voucher-name">#1000 voucher</h4>
-              <p className="purchased">Purchased</p>
-            </div>
+            { 
+              this.state.vouchers.map((voucher, i) => {
+                return <Voucher key={i} voucher={voucher} click={this.props.getPayment}/>
+              })
+            }
           </div>
         </section>
       </div>
