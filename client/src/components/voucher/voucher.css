@@ -7,7 +7,7 @@
 }
 
 .voucher-btn {
-  padding: 15px 22px;
+  padding: 12px 20px;
   background: purple;
   color: white;
   font-size: 1.2rem;
@@ -19,5 +19,12 @@
 
 .voucher-btn:hover,
 .voucher-btn:focus {
+  background: rgb(204, 31, 204);
   box-shadow: 0 0px 10px 1px rgba(0, 0, 0, 0.2);
+}
+
+.voucher-price {
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: firebrick;
 }

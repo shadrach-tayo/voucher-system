@@ -1,23 +1,40 @@
 import React, { Component } from 'react';
 import './dashboard.css';
-import vouchers from '../../data/voucher.js';
 import Voucher from '../voucher/Voucher';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
-      user: {
-        displayName: 'shadrach',
-        email: 'shadrachtemitayo@gmail.com'
-      },
-      vouchers
+      user: '',
+      vouchers: []
     }
   }
 
-  componentDidMount() {
-    console.log(this.state);
+  componentWillMount() {
+    this.getUser().then(user => {
+      this.setState({...this.state, user});
+    });
+
+    this.getAllVouchers().then(response => {
+      const vouchers = response;
+      this.setState((state) => ({
+        ...state,
+        ...vouchers
+      }))
+      console.log(this.state);
+    })
+  }
+
+  getUser() {
+    return fetch('api/current_user')
+      .then(res => res.json())
+      .catch(err => console.log('user not loggedIn: ', err))
+  }
+
+  getAllVouchers() {
+    return fetch('api/vouchers').then(res => res.json())
+    .catch(err => console.log(err))
   }
 
   render() {

@@ -6,26 +6,27 @@ import Login from './components/login/Login';
 import Dashboard from './components/dashboard/Dashboard';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super()
     this.state = {
       isloggedIn: false,
-      user: '',
-      boughtVouchers: []
+      user: null
     }
   }
 
   componentDidMount() {
-    this.getUser();
+    this.getUser().then(user => {
+      this.setState((state, props) => ({
+        isloggedIn: true,
+        user
+      }));
+    });
+    console.log(this.state);
   }
 
   getUser() {
-    fetch('api/current_user')
+    return fetch('api/current_user')
       .then(res => res.json())
-      .then(user => {
-        this.setState({...this.state, isloggedIn: true, user});
-        console.log(this.state);
-      })
       .catch(err => console.log('user not loggedIn: ', err))
   }
 
@@ -33,18 +34,15 @@ class App extends Component {
     console.log('getting payment for: ', e.target.parentNode.getAttribute('id'));
   }
 
-  logout() {
-    console.log('logging user out');
-  }
-
   render() {
     return (
       <div>
         <BrowserRouter>
           <div>
-            <Header isloggedIn={this.state.isloggedIn} logout={this.logout}/>
+            <Header isloggedIn={this.state.isloggedIn} />
             <Route exact path="/" component={Login} />
-            <Route exact path="/dashboard" render={() => <Dashboard getPayment={this.getPayment}/>}/>
+            <Route exact path="/dashboard" render={() => <Dashboard getPayment={this.getPayment}/>} />
+            {/* <Route path="/dashboard/wallet" exact={() => <Wallet /> }/> */}
           </div>
         </BrowserRouter>
       </div>
@@ -52,7 +50,5 @@ class App extends Component {
   }
 
 }
-
-
 
 export default App;
