@@ -24,7 +24,13 @@
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+<<<<<<< HEAD
     "mongoose": "^4.7.2",
+||||||| merged common ancestors
+    "mongoose": "^4.11.1",
+=======
+    "mongoose": "^5.3.10",
+>>>>>>> 86564fe5963bff37e8ce2e092c1b873728a8bd2f
     "nodemon": "^1.18.5",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0"
