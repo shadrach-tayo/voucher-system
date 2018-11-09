@@ -12,6 +12,8 @@ class App extends Component {
       isloggedIn: false,
       user: null
     }
+
+    this.getUser = this.getUser.bind(this);
   }
 
   componentDidMount() {
@@ -30,9 +32,7 @@ class App extends Component {
       .catch(err => console.log('user not loggedIn: ', err))
   }
 
-  getPayment(e) {
-    console.log('getting payment for: ', e.target.parentNode.getAttribute('id'));
-  }
+  
 
   render() {
     return (
@@ -41,7 +41,7 @@ class App extends Component {
           <div>
             <Header isloggedIn={this.state.isloggedIn} />
             <Route exact path="/" component={Login} />
-            <Route exact path="/dashboard" render={() => <Dashboard getPayment={this.getPayment}/>} />
+            <Route exact path="/dashboard" render={() => <Dashboard/>} />
             {/* <Route path="/dashboard/wallet" exact={() => <Wallet /> }/> */}
           </div>
         </BrowserRouter>

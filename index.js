@@ -23,8 +23,6 @@ app.use(passport.session());
 
 // parse application/json
 app.use(bodyParser.json())
-
-
 app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
 
 app.get('/', (req, res) => {
@@ -35,9 +33,21 @@ app.get('/', (req, res) => {
 // and plug into express app instance
 require('./routes/authRoutes')(app);
 require('./models/Voucher');
+require('./models/BoughtVoucher');
 require('./routes/voucherRoutes')(app);
 require('./models/User');
 require('./services/passport');
+
+if(process.env.NODE_ENV === 'production') {
+  // serve production assets
+  app.use(express.static('client/build'))
+
+  // serve index.html file if path is not recongnized
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Server running on port: ', PORT));

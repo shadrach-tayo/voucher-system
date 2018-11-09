@@ -39,7 +39,10 @@ passport.use(new GoogleStrategy({
             displayName: profile.displayName,
             imageUrl: profile.photos[0].value
           }).save()
-            .then(user => done(null, user))
+            .then(user => {
+              console.log(user);
+              done(null, user)
+            })
         }
       })
     

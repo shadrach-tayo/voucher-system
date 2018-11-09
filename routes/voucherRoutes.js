@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Voucher = mongoose.model('vouchers');
+const BoughtVoucher = mongoose.model('boughtvouchers');
 
 module.exports = app => {
   // request to add vouchers to database
@@ -13,6 +14,22 @@ module.exports = app => {
     }
     console.log(req.body);
     saveVouchersToDb(voucher).then((voucher) => {
+      res.send(voucher);
+    })
+    .catch(err => res.send(err))
+  })
+  
+  app.post('api/voucher', (req, res) => {
+    const voucher = req.body;
+    console.log(voucher);
+    res.send(req.body);
+    // if(!voucher) {
+    //   res.status(500)
+    //     .send('no vouchers sent');
+    //   return;
+    // }
+    console.log(req.body);
+    saveUserVoucher(voucher).then((voucher) => {
       res.send(voucher);
     })
     .catch(err => res.send(err))
@@ -37,10 +54,24 @@ module.exports = app => {
         if(vouchers) {
           res.json({vouchers});
         } else {
-          console.log('not found: ', vouchers);
           res.status(404)
             .send('not found');
         }
+      })
+  })
+}
+
+
+function saveUserVoucher(voucher) {
+  return new Promise(async (resolve, reject) => {
+    new BoughtVoucher({
+      userId: voucher.userId,
+      id: voucher.id,
+      amount: voucher.amount,
+      voucherId: voucher.voucherId
+    }).save()
+      .then(voucher => {
+        resolve(voucher);
       })
   })
 }
@@ -55,7 +86,6 @@ function saveVouchersToDb(voucher) {
     })
       .save()
       .then(voucher => {
-        console.log(voucher.name, ' has been saved')
         resolve(voucher);
       })
   })
