@@ -87,8 +87,8 @@ class Dashboard extends Component {
   }
 
   saveTransaction(voucher) {
-    fetch('/voucher', {
-      method: 'POST',
+    fetch('api/voucher', {
+      method: 'PUT',
       body: JSON.stringify(voucher)
     }).then(res => console.log(res));
   }

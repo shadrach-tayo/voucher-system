@@ -5,9 +5,9 @@ import './header.css';
 
 class Header extends Component {
   constructor(props) {
-    super();
-    this.isLoggedIn = props.isLoggedIn;
-    console.log(props);
+    super(props);
+    this.isLoggedIn = this.props.isLoggedIn;
+    console.log(this.props);
   }
 
   render() {

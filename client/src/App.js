@@ -16,12 +16,10 @@ class App extends Component {
     this.getUser = this.getUser.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getUser().then(user => {
-      this.setState((state, props) => ({
-        isloggedIn: true,
-        user
-      }));
+      console.log('user is :', user);
+      this.setState({user, isloggedIn: true});
     });
     console.log(this.state);
   }
@@ -31,8 +29,6 @@ class App extends Component {
       .then(res => res.json())
       .catch(err => console.log('user not loggedIn: ', err))
   }
-
-  
 
   render() {
     return (

@@ -7,15 +7,21 @@ const User = mongoose.model('users');
 
 // serialize user 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  console.log('serializing user :', user);
+  done(null, user._id);
 });
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-  User.findById(id).then(user => {
+  console.log('deserializing user: ', id);
+  User.findById(id)
+  .then(user => {
     console.log(user);
     done(null, user)
-  });
+  }).catch(err => {
+    console.log(err);
+    done('error: still not working');
+  })
 })
 
 // config for the google strategy when authentication using google
@@ -34,6 +40,7 @@ passport.use(new GoogleStrategy({
           done(null, existingUser);
         } else {
           new User({
+            _id: profile.id,
             googleId: profile.id,
             email: profile.emails[0].value,
             displayName: profile.displayName,
@@ -45,6 +52,5 @@ passport.use(new GoogleStrategy({
             })
         }
       })
-    
   }
 ));

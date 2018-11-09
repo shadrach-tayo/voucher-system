@@ -4,37 +4,6 @@ const Voucher = mongoose.model('vouchers');
 const BoughtVoucher = mongoose.model('boughtvouchers');
 
 module.exports = app => {
-  // request to add vouchers to database
-  app.post('/vouchers', (req, res) => {
-    const voucher = req.body;
-    console.log(voucher);
-    if(!voucher) {
-      res.send('no vouchers sent');
-      return;
-    }
-    res.send(voucher);
-  })
-  
-  app.post('/voucher', (req, res) => {
-    const voucher = req.body;
-    console.log(voucher); 
-    // if(!voucher) {
-    //   res.status(500)
-    //     .send('no vouchers sent');
-    //   return;
-    // }
-    console.log(req.body);
-    saveUserVoucher(voucher).then((voucher) => {
-      res.send(voucher);
-    })
-    .catch(err => res.send(err))
-  });
-  
-  app.get('api/voucher', (req, res) => {
-    res.send({message: "it's fucking working"});
-    
-  });
-
   app.get('/voucher/:id', async (req, res) => {
     Voucher.findOne({id: req.params.id})
       .then(voucher => {
@@ -57,7 +26,21 @@ module.exports = app => {
             .send('not found');
         }
       })
-  })
+  });
+
+  app.put('/api/voucher', (req, res) => {
+    const voucher = req.body;
+    console.log(voucher); 
+    if(!voucher) {
+      res.status(500)
+        .send('no vouchers sent');
+      return;
+    }
+    saveUserVoucher(voucher).then((voucher) => {
+      res.send(voucher);
+    })
+    .catch(err => res.send(err))
+  });
 }
 
 
@@ -69,21 +52,6 @@ function saveUserVoucher(voucher) {
       amount: voucher.amount,
       voucherId: voucher.voucherId
     }).save()
-      .then(voucher => {
-        resolve(voucher);
-      })
-  })
-}
-
-function saveVouchersToDb(voucher) {
-  return new Promise(async (resolve, reject) => {
-    new Voucher({
-      name: voucher.name,
-      id: voucher.id,
-      code: voucher.code,
-      price: voucher.price
-    })
-      .save()
       .then(voucher => {
         resolve(voucher);
       })
