@@ -23,7 +23,11 @@ app.use(passport.session());
 
 // parse application/json
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+// app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+
+app.get('/', (req, res) => {
+  res.send('<h1>Welcome to Voucher system</h1>')
+}); 
 
 // require authentication routing handler
 // and plug into express app instance
@@ -39,7 +43,6 @@ if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'))
 
   // serve index.html file if path is not recongnized
-  const path = require('path');
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   })

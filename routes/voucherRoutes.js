@@ -5,23 +5,19 @@ const BoughtVoucher = mongoose.model('boughtvouchers');
 
 module.exports = app => {
   // request to add vouchers to database
-  app.post('/voucher', (req, res) => {
+  app.post('/vouchers', (req, res) => {
     const voucher = req.body;
     console.log(voucher);
     if(!voucher) {
       res.send('no vouchers sent');
       return;
     }
-    saveVouchersToDb(voucher).then((voucher) => {
-      res.send(voucher);
-    })
-    .catch(err => res.send(err))
+    res.send(voucher);
   })
   
-  app.post('api/voucher', (req, res) => {
+  app.post('/voucher', (req, res) => {
     const voucher = req.body;
-    console.log(voucher);
-    res.send(req.body);
+    console.log(voucher); 
     // if(!voucher) {
     //   res.status(500)
     //     .send('no vouchers sent');
