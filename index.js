@@ -25,10 +25,6 @@ app.use(passport.session());
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
 
-app.get('/', (req, res) => {
-  res.send('<h1>Welcome to Voucher system</h1>')
-}); 
-
 // require authentication routing handler
 // and plug into express app instance
 require('./models/Voucher');

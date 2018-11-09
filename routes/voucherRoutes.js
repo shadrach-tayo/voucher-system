@@ -12,7 +12,6 @@ module.exports = app => {
       res.send('no vouchers sent');
       return;
     }
-    console.log(req.body);
     saveVouchersToDb(voucher).then((voucher) => {
       res.send(voucher);
     })
@@ -55,7 +54,6 @@ module.exports = app => {
   app.get('/api/vouchers', async (req, res) => {
     Voucher.find()
       .then(vouchers => {
-        console.log(vouchers);
         if(vouchers) {
           res.json({vouchers});
         } else {

@@ -7,13 +7,15 @@ const User = mongoose.model('users');
 
 // serialize user 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user._id);
 });
 
 // deserialize user
 passport.deserializeUser((id, done) => {
   console.log(id);
-  User.findById(id).then(user => {
+  const userId = mongoose.Types.ObjectId(id);
+  User.findById(userId).then(user => {
+    console.log('deserilizing user: ', user);
     done(null, user)
   });
 })
