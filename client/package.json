@@ -8,9 +8,6 @@
     },
     "/api/*": {
       "target": "http://localhost:5000"
-    },
-    "/api/voucher": {
-      "target": "http://localhost:5000"
     }
   },
   "dependencies": {
@@ -25,5 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "webpack": "^2.2.0"
   }
 }

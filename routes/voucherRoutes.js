@@ -33,7 +33,12 @@ module.exports = app => {
       res.send(voucher);
     })
     .catch(err => res.send(err))
-  })
+  });
+  
+  app.get('api/voucher', (req, res) => {
+    res.send({message: "it's fucking working"});
+    
+  });
 
   app.get('/voucher/:id', async (req, res) => {
     Voucher.findOne({id: req.params.id})

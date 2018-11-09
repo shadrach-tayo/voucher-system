@@ -31,11 +31,11 @@ app.get('/', (req, res) => {
 
 // require authentication routing handler
 // and plug into express app instance
-require('./routes/authRoutes')(app);
 require('./models/Voucher');
 require('./models/BoughtVoucher');
-require('./routes/voucherRoutes')(app);
 require('./models/User');
+require('./routes/authRoutes')(app);
+require('./routes/voucherRoutes')(app);
 require('./services/passport');
 
 if(process.env.NODE_ENV === 'production') {
