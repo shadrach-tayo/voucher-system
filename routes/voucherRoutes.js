@@ -5,16 +5,28 @@ const BoughtVoucher = mongoose.model('boughtvouchers');
 
 module.exports = app => {
   // request to add vouchers to database
-  app.post('/vouchers', (req, res) => {
-    const voucher = req.body;
-    console.log(voucher);
-    if(!voucher) {
-      res.send('no vouchers sent');
-      return;
-    }
-    res.send(voucher);
+  // app.post('/vouchers', (req, res) => {
+  //   const voucher = req.body;
+  //   console.log(voucher);
+  //   if(!voucher) {
+  //     res.send('no vouchers sent');
+  //     return;
+  //   }
+  //   res.send(voucher);
+  // })
+
+  app.get('/voucher/:id', async (req, res) => {
+    Voucher.findOne({id: req.params.id})
+      .then(voucher => {
+        if(voucher) {
+          res.json({voucher});
+        } else {
+          res.status(404)
+            .send('not found');
+        }
+      })
   })
-  
+
   app.post('/voucher', (req, res) => {
     const voucher = req.body;
     console.log(voucher); 
@@ -29,23 +41,6 @@ module.exports = app => {
     })
     .catch(err => res.send(err))
   });
-  
-  app.get('api/voucher', (req, res) => {
-    res.send({message: "it's fucking working"});
-    
-  });
-
-  app.get('/voucher/:id', async (req, res) => {
-    Voucher.findOne({id: req.params.id})
-      .then(voucher => {
-        if(voucher) {
-          res.json({voucher});
-        } else {
-          res.status(404)
-            .send('not found');
-        }
-      })
-  })
   
   app.get('/api/vouchers', async (req, res) => {
     Voucher.find()
@@ -75,17 +70,17 @@ function saveUserVoucher(voucher) {
   })
 }
 
-function saveVouchersToDb(voucher) {
-  return new Promise(async (resolve, reject) => {
-    new Voucher({
-      name: voucher.name,
-      id: voucher.id,
-      code: voucher.code,
-      price: voucher.price
-    })
-      .save()
-      .then(voucher => {
-        resolve(voucher);
-      })
-  })
-}
+// function saveVouchersToDb(voucher) {
+//   return new Promise(async (resolve, reject) => {
+//     new Voucher({
+//       name: voucher.name,
+//       id: voucher.id,
+//       code: voucher.code,
+//       price: voucher.price
+//     })
+//       .save()
+//       .then(voucher => {
+//         resolve(voucher);
+//       })
+//   })
+// }

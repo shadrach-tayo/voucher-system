@@ -23,7 +23,7 @@ app.use(passport.session());
 
 // parse application/json
 app.use(bodyParser.json())
-// app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Voucher system</h1>')
