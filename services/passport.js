@@ -13,13 +13,13 @@ passport.serializeUser((user, done) => {
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-  console.log('deserializing user by _id: ', id);
-  User.find({_id: id})
+  console.log('deserializing user by googleId: ', id);
+  User.find({googleId: id})
   .then(user => {
     done(null, user)
   }).catch(err => {
     console.log(err);
-    done('error: still not working');
+    done('error: still not working with googleId');
   })
 })
 
