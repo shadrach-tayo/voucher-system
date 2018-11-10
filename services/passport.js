@@ -13,18 +13,9 @@ passport.serializeUser((user, done) => {
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-<<<<<<< HEAD
   console.log('deserializing user: ', id);
   User.findById(id)
   .then(user => {
-||||||| merged common ancestors
-  User.findById(id).then(user => {
-=======
-  console.log('deserializing user: ', id);
-  User.findOne({_id: id})
-  .then(user => {
->>>>>>> 86564fe5963bff37e8ce2e092c1b873728a8bd2f
-    console.log(user);
     done(null, user)
   }).catch(err => {
     console.log(err);
@@ -43,8 +34,7 @@ passport.use(new GoogleStrategy({
     User.findOne({ googleId: profile.id })
       .then(existingUser => {
         if(existingUser) {
-          // user already exits
-          console.log('existing user: ', existingUser);
+          // user exits
           done(null, existingUser);
         } else {
           new User({
@@ -55,7 +45,6 @@ passport.use(new GoogleStrategy({
             imageUrl: profile.photos[0].value
           }).save()
             .then(user => {
-              console.log(user);
               done(null, user)
             })
         }

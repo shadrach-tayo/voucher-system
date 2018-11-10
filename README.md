@@ -1,6 +1,13 @@
 # Voucher-system
 A Voucher system application for purchasing vouchers
 
+## To run app locally 
+- clone the repository to your local computer
+- run ```npm install``` in the root directory 
+- on the command line, cd client and run ```npm install```
+- after all installs have being completed go back to the root directory 
+- run ```npm run dev``` to start both server and client 
+
 ## The project uses the **MERN STACK** 
 - Mongo 
 - Express
