@@ -13,8 +13,8 @@ passport.serializeUser((user, done) => {
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-  console.log('deserializing user: ', id);
-  User.findById(id)
+  console.log('deserializing user by _id: ', id);
+  User.find({_id: id})
   .then(user => {
     done(null, user)
   }).catch(err => {
