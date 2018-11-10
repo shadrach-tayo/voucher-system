@@ -8,7 +8,7 @@ const User = mongoose.model('users');
 // serialize user 
 passport.serializeUser((user, done) => {
   console.log('serializing user :', user);
-  done(null, user._id);
+  done(null, user.id);
 });
 
 // deserialize user
