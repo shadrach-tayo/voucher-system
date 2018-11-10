@@ -13,17 +13,9 @@ passport.serializeUser((user, done) => {
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-<<<<<<< HEAD
-  console.log('deserializing user: ', id);
-  User.findById(id)
-  .then(user => {
-||||||| merged common ancestors
-  User.findById(id).then(user => {
-=======
   console.log('deserializing user: ', id);
   User.findOne({_id: id})
   .then(user => {
->>>>>>> 86564fe5963bff37e8ce2e092c1b873728a8bd2f
     console.log(user);
     done(null, user)
   }).catch(err => {
