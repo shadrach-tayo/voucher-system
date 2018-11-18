@@ -5,7 +5,10 @@ const keys = require('./config/keys');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+// const https = require('https');
+// const fs = require('fs')
+
+// let server
 const app = express();
 
 // connect mongoose to our mongodb instance
@@ -17,13 +20,31 @@ app.use(
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey]
   })
-);
-app.use(passport.initialize());
-app.use(passport.session());
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  // parse application/json
+  app.use(express.json())
+  
+if(process.env.NODE_ENV === 'production') {
+  // server = https.createServer(app);
+  // serve production assets
+  app.use(express.static('client/build'))
 
-// parse application/json
-app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+  // serve index.html file if path is not recongnized
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+} else {
+  app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+  // const httpsOptions = {
+  //   cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+  //   key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
+  // }
+  // server = https.createServer(httpsOptions, app);
+}
+
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Voucher system</h1>')
@@ -38,15 +59,6 @@ require('./routes/authRoutes')(app);
 require('./routes/voucherRoutes')(app);
 require('./services/passport');
 
-if(process.env.NODE_ENV === 'production') {
-  // serve production assets
-  app.use(express.static('client/build'))
-
-  // serve index.html file if path is not recongnized
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  })
-}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Server running on port: ', PORT));

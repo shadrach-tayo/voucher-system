@@ -1,0 +1,4 @@
+runtime: nodejs9
+
+env_variables:
+  NODE_ENV: "production"

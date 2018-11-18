@@ -16,7 +16,6 @@ class Dashboard extends Component {
 
   componentWillMount() {
     this.getUser().then(user => {
-      window.user = user;
       console.log('user returned: ', user);
       this.setState({...this.state, user});
     });
@@ -88,7 +87,10 @@ class Dashboard extends Component {
 
   saveTransaction(voucher) {
     fetch('api/voucher', {
-      method: 'PUT',
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(voucher)
     }).then(res => console.log(res));
   }
@@ -97,8 +99,14 @@ class Dashboard extends Component {
     return (
       <div className="">
         <section className="details user-details">
-          <div className="user-detail-card"><span className="user-detail-title">Name :</span> {this.state.user.displayName}</div>
-          <div className="user-detail-card"><span className="user-detail-title">Email :</span> {this.state.user.email}</div>
+          <div className="user-detail-card">
+            <span className="user-detail-title">Name :</span> 
+            {this.state.user.displayName}
+          </div>
+          <div className="user-detail-card">
+            <span className="user-detail-title">Email :</span> 
+            {this.state.user.email}
+          </div>
         </section>
         <section className="voucher-list">
           <h1>Featured vouchers</h1>

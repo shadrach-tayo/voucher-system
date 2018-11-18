@@ -16,7 +16,7 @@ module.exports = app => {
       })
   })
   
-  app.get('/api/vouchers', async (req, res) => {
+  app.get('/api/vouchers', (req, res) => {
     Voucher.find()
       .then(vouchers => {
         if(vouchers) {
@@ -28,7 +28,8 @@ module.exports = app => {
       })
   });
 
-  app.put('/api/voucher', (req, res) => {
+  app.post('/api/voucher', (req, res) => {
+    console.log(req)
     const voucher = req.body;
     console.log(voucher); 
     if(!voucher) {
@@ -37,12 +38,12 @@ module.exports = app => {
       return;
     }
     saveUserVoucher(voucher).then((voucher) => {
+      console.log('saved to database');
       res.send(voucher);
     })
     .catch(err => res.send(err))
   });
 }
-
 
 function saveUserVoucher(voucher) {
   return new Promise(async (resolve, reject) => {
