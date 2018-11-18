@@ -29,7 +29,6 @@ module.exports = app => {
   });
 
   app.post('/api/voucher', (req, res) => {
-    console.log(req)
     const voucher = req.body;
     console.log(voucher); 
     if(!voucher) {
