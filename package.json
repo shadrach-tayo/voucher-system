@@ -14,6 +14,7 @@
     "client-prod": "npm run build --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "prod": "concurrently \"npm start\" \"npm run client-prod\"",
+    "postbuild": "npm install --prefix client && npm run build --prefix client",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [
