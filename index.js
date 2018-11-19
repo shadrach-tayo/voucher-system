@@ -27,23 +27,23 @@ app.use(
   // parse application/json
   app.use(express.json())
   
-if(process.env.NODE_ENV === 'production') {
-  // server = https.createServer(app);
-  // serve production assets
-  app.use(express.static('client/build'))
+// if(process.env.NODE_ENV === 'production') {
+//   // server = https.createServer(app);
+//   // serve production assets
+//   app.use(express.static('client/build'))
 
-  // serve index.html file if path is not recongnized
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  })
-} else {
-  app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
-  // const httpsOptions = {
-  //   cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
-  //   key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
-  // }
-  // server = https.createServer(httpsOptions, app);
-}
+//   // serve index.html file if path is not recongnized
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+//   })
+// } else {
+//   app.use(express.static(path.join(__dirname, 'client/public', 'index.html')))
+//   // const httpsOptions = {
+//   //   cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+//   //   key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
+//   // }
+//   // server = https.createServer(httpsOptions, app);
+// }
 
 
 app.get('/', (req, res) => {
