@@ -34,9 +34,11 @@ passport.use(new GoogleStrategy({
     User.findOne({ googleId: profile.id })
       .then(existingUser => {
         if(existingUser) {
-          // user exits
+          // user exits call done with existing user 
+          // as second argument
           done(null, existingUser);
         } else {
+          // New User -- create and save to database
           new User({
             _id: profile.id,
             googleId: profile.id,

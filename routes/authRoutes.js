@@ -1,32 +1,33 @@
 const passport = require('passport');
 
 /**
- * Module to handle authentication routing
+ * Module to handle authentication routing request
  */
 module.exports = app => {
-    
+  
+  // Handle Google Login requests
   app.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email']
   }));
 
+  // Finalize user Authentication on google callback
   app.get(
     '/auth/google/callback', 
     passport.authenticate('google', {failureRedirect: '/'}),
     (req, res) => {
-      res.redirect('/dashboard');
+      res.redirect('/');
     }
   );
-
-  app.get('/api/logout', (req, res) => {
+  
+  // Handle User Logout Request
+  app.get('*/api/logout', (req, res) => {
     req.logout();
     res.redirect('/')
   })
 
-  app.get('/api/current_user', (req, res) => {
+  // Handle request for currently logged In user
+  app.get('*/api/current_user', (req, res) => {
     res.send(req.user);
   })
 
-  app.get('/dashboard', (req, res) => {
-    res.send(req.user);
-  })
 }
