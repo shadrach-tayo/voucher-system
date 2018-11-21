@@ -44,7 +44,6 @@ if(process.env.NODE_ENV === 'production') {
 
 
 require('./models/Voucher');
-require('./models/BoughtVoucher');
 require('./models/User');
 // require authentication routing handler
 // and plug into express app instance

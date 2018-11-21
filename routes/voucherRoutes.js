@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Voucher = mongoose.model('vouchers');
-const BoughtVoucher = mongoose.model('boughtvouchers');
 const User = mongoose.model('users');
 
 /**
@@ -36,13 +35,15 @@ module.exports = app => {
   // handle request to save voucher under a particular user
   app.post('*/api/voucher', (req, res) => {
     const voucher = req.body;
+    const user = req.user;
     console.log(voucher); 
+    console.log(user); 
     if(!voucher) {
       res.status(500)
         .send('no vouchers sent');
       return;
     }
-    saveUserVoucher(voucher).then((voucher) => {
+    saveUserVoucher(user, voucher).then((voucher) => {
       console.log('saved to database');
       res.send(voucher);
     })
@@ -54,22 +55,14 @@ module.exports = app => {
  * Save voucher object to a user's list of purchased vouchers
  * @param {Object} voucher 
  */
-function saveUserVoucher(voucher) {
+function saveUserVoucher(user, voucher) {
   return new Promise(async (resolve, reject) => {
-    User.findOne({googleId: voucher.userId}).then(user => {
-      console.log(user.vouchers);
-      user.vouchers.push(
-        new BoughtVoucher({
-          userId: voucher.userId,
-          id: voucher.id,
-          amount: voucher.amount,
-          voucherId: voucher.voucherId
-        })
-      )
+    user.vouchers.push(voucher);
+    console.log('unsaved updated user: ', user);
+    User.findByIdAndUpdate(user.googleId, user).then(user => {
+      console.log('user updated: ', user);
+      resolve(voucher);
     })
-   .save()
-      .then(voucher => {
-        resolve(voucher);
-      })
+    .catch(err => reject(err))
   })
 }

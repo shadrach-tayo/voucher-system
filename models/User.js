@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const BoughtVoucherschema = mongoose.model('boughtvouchers');
 
 // Define user schema
 const userSchema = new Schema({
@@ -9,7 +8,7 @@ const userSchema = new Schema({
   email: String,
   imageUrl: String,
   displayName: String,
-  vouchers: [BoughtVoucherschema]
+  vouchers: [{amount: Number, id: Number, voucherId: String, name: String}]
 })
 
 mongoose.model('users', userSchema);
