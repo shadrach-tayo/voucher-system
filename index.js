@@ -27,6 +27,7 @@ app.use(
   app.use(express.json())
   
 if(process.env.NODE_ENV === 'production') {
+  console.log('production')
   // serve production assets
   app.use(express.static('client'))
   
@@ -35,9 +36,10 @@ if(process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
   })
 } else {
+    console.log('development')
     app.use(express.static('client'))
-    app.get('/', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'client'));
     })
 }
 
