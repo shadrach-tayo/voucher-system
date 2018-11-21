@@ -36,15 +36,12 @@ module.exports = app => {
   app.post('*/api/voucher', (req, res) => {
     const voucher = req.body;
     const user = req.user;
-    console.log(voucher); 
-    console.log(user); 
     if(!voucher) {
       res.status(500)
         .send('no vouchers sent');
       return;
     }
     saveUserVoucher(user, voucher).then((voucher) => {
-      console.log('saved to database');
       res.send(voucher);
     })
     .catch(err => res.send(err))
@@ -58,9 +55,7 @@ module.exports = app => {
 function saveUserVoucher(user, voucher) {
   return new Promise(async (resolve, reject) => {
     user.vouchers.push(voucher);
-    console.log('unsaved updated user: ', user);
     User.findByIdAndUpdate(user.googleId, user).then(user => {
-      console.log('user updated: ', user);
       resolve(voucher);
     })
     .catch(err => reject(err))

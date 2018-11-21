@@ -37,7 +37,6 @@ if(process.env.NODE_ENV === 'production') {
 } else {
     app.use(express.static('client'))
     app.get('/', (req, res) => {
-      console.log(req);
       res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
     })
 }
