@@ -25,25 +25,8 @@ app.use(
   
   // parse application/json
   app.use(express.json())
-  
-if(process.env.NODE_ENV === 'production') {
-  console.log('production')
-  // serve production assets
-  app.use(express.static('client'))
-  
-  // serve index.html file if path is not recongnized
-  app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
-  })
-} else {
-    console.log('development')
-    app.use(express.static('client'))
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client'));
-    })
-}
 
-
+  
 require('./models/Voucher');
 require('./models/User');
 // require authentication routing handler
@@ -51,6 +34,30 @@ require('./models/User');
 require('./routes/authRoutes')(app);
 require('./routes/voucherRoutes')(app);
 require('./services/passport');
+
+// if(process.env.NODE_ENV === 'production') {
+//   console.log('production')
+//   // serve production assets
+//   app.use(express.static('client'))
+  
+//   // serve index.html file if path is not recongnized
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'client'));
+//   }) 
+// } else {
+//     // console.log('development')
+//     app.use(express.static('client'))
+//     app.get('/', (req, res) => {
+//       res.sendFile(path.resolve(__dirname, 'client', 'index.html'));
+//       // res.send('welcome to bezop')
+//     })
+// }
+
+app.use(express.static('client'))
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client/index.html'));
+  // res.send('welcome to bezop')
+})
 
 // Serve app {PORT} depending on the environment
 const PORT = process.env.PORT || 5000;

@@ -19,6 +19,16 @@ module.exports = app => {
       })
   })
   
+  app.delete('/voucher/:id', (req, res) => {
+    const user = req.user;
+    console.log('delete voucher', req.params.id, user);
+    deleteUserVoucher(user, req.params.id)
+      .then(() => {
+        res.status(200)
+          .send('successfully deleted')
+      })
+  })
+
   // handle request to get all available vouchers in Database
   app.get('*/api/vouchers', (req, res) => {
     Voucher.find()
@@ -31,6 +41,7 @@ module.exports = app => {
         }
       })
   });
+
 
   // handle request to save voucher under a particular user
   app.post('*/api/voucher', (req, res) => {
@@ -61,3 +72,16 @@ function saveUserVoucher(user, voucher) {
     .catch(err => reject(err))
   })
 }
+
+function deleteUserVoucher(user, id) {
+  return new Promise((resolve, reject) => {
+    console.log(user.vouchers, Number(id));
+    user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
+    console.log('updated user: ', user);
+    User.findByIdAndUpdate(user.googleId, user)
+      .then(user => {
+        resolve(user);
+      })
+      .catch(err => reject(err))
+  })
+};

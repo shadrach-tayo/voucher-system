@@ -7,16 +7,16 @@ const User = mongoose.model('users');
 
 // serialize user 
 passport.serializeUser((user, done) => {
-  console.log('serializing user :', user);
+  // console.log('serializing user :', user);
   done(null, user.id);
 });
 
 // deserialize user
 passport.deserializeUser((id, done) => {
-  console.log('deserializing user by googleId: ', id);
+  // console.log('deserializing user by googleId: ', id);
   User.findOne({googleId: id})
   .then(user => {
-    console.log('deserializing user', user);
+    // console.log('deserializing user', user);
     done(null, user)
   }).catch(err => {
     console.log(err);
@@ -37,7 +37,7 @@ passport.use(new GoogleStrategy({
         if(existingUser) {
           // user exits call done with existing user 
           // as second argument
-          console.log('existing user: ', existingUser);
+          // console.log('existing user: ', existingUser);
           done(null, existingUser);
         } else {
           // New User -- create and save to database
@@ -49,7 +49,7 @@ passport.use(new GoogleStrategy({
             imageUrl: profile.photos[0].value
           }).save()
             .then(user => {
-              console.log('new user: ', user);
+              // console.log('new user: ', user);
               done(null, user)
             })
         }
