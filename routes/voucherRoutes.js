@@ -46,16 +46,16 @@ module.exports = app => {
   // handle request to save voucher under a particular user
   app.post('*/api/voucher', (req, res) => {
     const voucher = req.body;
-    const user = req.user;
     if(!voucher) {
-      res.status(500)
+      return res.status(500)
         .send('no vouchers sent');
-      return;
     }
-    saveUserVoucher(user, voucher).then((voucher) => {
-      res.send(voucher);
+    User.findById(req.session.userId).then(user => {
+      saveUserVoucher(user, voucher).then((voucher) => {
+       return res.send(voucher);
+      })
+      .catch(err => res.send(err))
     })
-    .catch(err => res.send(err))
   });
 }
 
@@ -66,8 +66,8 @@ module.exports = app => {
 function saveUserVoucher(user, voucher) {
   return new Promise(async (resolve, reject) => {
     user.vouchers.push(voucher);
-    User.findByIdAndUpdate(user.googleId, user).then(user => {
-      resolve(voucher);
+    User.findByIdAndUpdate(user._id, user).then(user => {
+      resolve(user);
     })
     .catch(err => reject(err))
   })
@@ -78,7 +78,7 @@ function deleteUserVoucher(user, id) {
     console.log(user.vouchers, Number(id));
     user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
     console.log('updated user: ', user);
-    User.findByIdAndUpdate(user.googleId, user)
+    User.findByIdAndUpdate(user._id, user)
       .then(user => {
         resolve(user);
       })
