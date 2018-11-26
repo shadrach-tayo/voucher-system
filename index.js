@@ -32,10 +32,10 @@ app.use(express.json());
 if(process.env.NODE_ENV === 'production') {
   console.log('production')
     
-  app.use(express.static(path.join(__dirname, "client")));
+  app.use(express.static(path.join(__dirname, "client/build")));
 
-  app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "client", "index.html"));
+  app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 } else {
   app.use(express.static(path.join(__dirname, "client/build")));
