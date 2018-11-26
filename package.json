@@ -23,7 +23,7 @@
   "author": "shadrach",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^3.0.0",
     "concurrently": "4.0.1",
     "connect-mongo": "^2.0.2",
     "cors": "2.8.5",
