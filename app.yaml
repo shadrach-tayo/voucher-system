@@ -3,7 +3,4 @@ runtime: nodejs10
 env_variables:
   NODE_ENV: "production"
   cookieKey: "vouchersystemcookiekey"
-  googleClientID: "753796190158-7nuhr7phr2pg5qsuh16ubbgosnagbc0g.apps.googleusercontent.com"
-  googleClientSecret: "I-C5eSzUQ5qRXLF1O4fUBnFd"
-  mongoURI: "mongodb://shadrach:26021999temitayo@ds027415.mlab.com:27415/voucher-pay"
-  googleCallBackURL: 'https://3000-dot-4871052-dot-devshell.appspot.com/auth/google/callback'
+  MONGO_URI: "mongodb://shadrach:26021999temitayo@ds027415.mlab.com:27415/voucher-pay"
