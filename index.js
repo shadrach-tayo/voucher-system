@@ -24,18 +24,16 @@ app.use(session({
   })
 }))
 app.use(cors());
-app.use(passport.initialize());
-app.use(passport.session());  
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 if(process.env.NODE_ENV === 'production') {
   console.log('production')
     
-  app.use(express.static(path.join(__dirname, "client")));
+  app.use(express.static(path.join(__dirname, "client/build")));
 
-  app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "client", "index.html"));
+  app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 } else {
   app.use(express.static(path.join(__dirname, "client/build")));
@@ -49,7 +47,6 @@ require("./models/Voucher");
 require("./models/User");
 require("./routes/authRoutes")(app);
 require("./routes/voucherRoutes")(app);
-require("./services/passport");
 
 
 // Serve app {PORT} depending on the environment

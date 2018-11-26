@@ -8,7 +8,7 @@ const uuidv1 = require('uuid/v1');
  */
 module.exports = app => {
   // Handle User Logout Request
-  app.get("*/api/logout", (req, res) => {
+  app.get("/api/logout", (req, res) => {
     console.log("logging out");
     if (req.session) {
       req.session.destroy(function(err) {
