@@ -1,4 +1,3 @@
-const passport = require("passport");
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const User = mongoose.model("users");
@@ -8,25 +7,8 @@ const uuidv1 = require('uuid/v1');
  * Module to handle authentication routing request
  */
 module.exports = app => {
-  // Handle Google Login requests
-  app.get(
-    "/auth/google",
-    passport.authenticate("google", {
-      scope: ["profile", "email"]
-    })
-  );
-
-  // Finalize user Authentication on google callback
-  app.get(
-    "/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/" }),
-    (req, res) => {
-      res.redirect("/");
-    }
-  );
-
   // Handle User Logout Request
-  app.get("/api/logout", (req, res) => {
+  app.get("*/api/logout", (req, res) => {
     console.log("logging out");
     if (req.session) {
       req.session.destroy(function(err) {
@@ -52,11 +34,11 @@ module.exports = app => {
           if (!user) {
             return res.json({ success: false, message: "user not found" });
           }
-          bcrypt.compare(password, user.password, function(err, result) {
+          bcrypt.compare(password, user.password, async function(err, result) {
             console.log('user to logIn: ', user);
             if (result === true) {
-              req.session.userId = user._id;
-              return res.redirect("/");
+              (req.session.userId = user._id);
+              return res.json({success: true})
             } else {
               return res.json({
                 success: false,
@@ -85,7 +67,7 @@ module.exports = app => {
     console.log("user: ", req.body);
     const { username, email, password, confirmPassword } = req.body;
     if (username && email && password && confirmPassword) {
-      // save new user to database
+      // save new user to database with a uuid generated _id property
       new User({
         _id: uuidv1(),
         username: username,
@@ -110,21 +92,21 @@ module.exports = app => {
   });
 
   // Handle request for currently logged In user
-  app.get("/api/current_user", (req, res) => {
+  app.get("*/api/current_user", (req, res) => {
     console.log("getting current user");
     User.findById(req.session.userId)
-      .then(user => {
+      .then(async user => {
         console.log("user: ", user, " session id: ", req.session.userId);
         if (user) {
           const { _id, username, email, vouchers } = user;
-          res.send({_id, username, email, vouchers});
+          res.json({_id, username, email, vouchers});
         } else {
           res.status(500).send('user not logged in');
         }
       })
       .catch(error => {
+        console.log(error);
         res.send("Server Error");
       });
-    // res.send(req.user);
   });
 };

@@ -1,8 +1,6 @@
 const express = require("express");
 const path = require("path");
-const cookieSession = require("cookie-session");
 const keys = require("./config/keys");
-const passport = require("passport");
 const mongoose = require("mongoose");
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -26,12 +24,6 @@ app.use(session({
   })
 }))
 app.use(cors());
-// app.use(
-//   cookieSession({
-//     maxAge: 30 * 24 * 60 * 60 * 1000,
-//     keys: [keys.cookieKey]
-//   })
-// );
 app.use(passport.initialize());
 app.use(passport.session());  
 app.use(express.urlencoded({ extended: true }));
@@ -46,9 +38,11 @@ if(process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, "client", "index.html"));
   });
 } else {
-    app.get('/', (req, res) => {
-      res.send('welcome to bezop')
-    })
+  app.use(express.static(path.join(__dirname, "client/build")));
+
+  app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
 }
 
 require("./models/Voucher");

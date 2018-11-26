@@ -7,7 +7,7 @@ const User = mongoose.model('users');
  * Accepts express app for which defined handlers are applied to
  */
 module.exports = app => {
-  app.get('/voucher/:id', async (req, res) => {
+  app.get('/voucher/:id', (req, res) => {
     Voucher.findOne({id: req.params.id})
       .then(voucher => {
         if(voucher) {
@@ -20,13 +20,13 @@ module.exports = app => {
   })
   
   app.delete('/voucher/:id', (req, res) => {
-    const user = req.user;
-    console.log('delete voucher', req.params.id, user);
-    deleteUserVoucher(user, req.params.id)
-      .then(() => {
-        res.status(200)
-          .send('successfully deleted')
+    User.findById(req.session.userId).then(user => {
+      deleteUserVoucher(user, req.params.id).then((user) => {
+        console.log('user voucher deleted: ', user);
+       return res.send({success: true, user: safeUserInfo(user)});
       })
+      .catch(error => res.send({success: false, error}))
+    })
   })
 
   // handle request to get all available vouchers in Database
@@ -51,10 +51,11 @@ module.exports = app => {
         .send('no vouchers sent');
     }
     User.findById(req.session.userId).then(user => {
-      saveUserVoucher(user, voucher).then((voucher) => {
-       return res.send(voucher);
+      saveUserVoucher(user, voucher).then((user) => {
+        console.log('user voucher saved: ', user);
+       return res.send({success: true, user: safeUserInfo(user)});
       })
-      .catch(err => res.send(err))
+      .catch(error => res.send({success: false, error}))
     })
   });
 }
@@ -64,7 +65,7 @@ module.exports = app => {
  * @param {Object} voucher 
  */
 function saveUserVoucher(user, voucher) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     user.vouchers.push(voucher);
     User.findByIdAndUpdate(user._id, user).then(user => {
       resolve(user);
@@ -77,7 +78,6 @@ function deleteUserVoucher(user, id) {
   return new Promise((resolve, reject) => {
     console.log(user.vouchers, Number(id));
     user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
-    console.log('updated user: ', user);
     User.findByIdAndUpdate(user._id, user)
       .then(user => {
         resolve(user);
@@ -85,3 +85,11 @@ function deleteUserVoucher(user, id) {
       .catch(err => reject(err))
   })
 };
+
+function safeUserInfo(user) {
+  return {
+    username: user.username,
+    email: user.email,
+    vouchers: user.vouchers
+  }
+}
