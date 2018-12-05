@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const User = mongoose.model("users");
-const uuidv1 = require('uuid/v1');
+const uuidv1 = require("uuid/v1");
 
 /**
  * Module to handle authentication routing request
@@ -19,7 +19,7 @@ module.exports = app => {
         }
       });
     } else {
-      res.redirect('/')
+      res.redirect("/");
     }
   });
 
@@ -34,11 +34,10 @@ module.exports = app => {
           if (!user) {
             return res.json({ success: false, message: "user not found" });
           }
-          bcrypt.compare(password, user.password, async function(err, result) {
-            console.log('user to logIn: ', user);
+          bcrypt.compare(password, user.password, function(err, result) {
             if (result === true) {
-              (req.session.userId = user._id);
-              return res.json({success: true})
+              req.session.userId = user._id;
+              return res.json({ success: true });
             } else {
               return res.json({
                 success: false,
@@ -72,36 +71,37 @@ module.exports = app => {
         _id: uuidv1(),
         username: username,
         password: password,
-        email: email,
-        confirmPassword: confirmPassword
-      }).save()
+        email: email
+      })
+        .save()
         .then(user => {
-          console.log("new user: ", user);
+          console.log("new user has been saved: ", user);
           req.session.userId = user._id;
-          res.json({success: true});
+          res.json({ success: true });
         })
         .catch(err => {
           console.log(err);
-          console.log('user not saved');
-          res.send('User not saved');
-        })
+          console.log("user not saved");
+          res.json({
+            success: false,
+            message: "Internal server error user not saved"
+          });
+        });
     } else {
-      console.log('user not saved');
+      console.log("user not saved");
       res.json({ success: false, message: "Fields cannot be empty" });
     }
   });
 
   // Handle request for currently logged In user
   app.get("*/api/current_user", (req, res) => {
-    console.log("getting current user");
     User.findById(req.session.userId)
-      .then(async user => {
-        console.log("user: ", user, " session id: ", req.session.userId);
+      .then(user => {
         if (user) {
           const { _id, username, email, vouchers } = user;
-          res.json({_id, username, email, vouchers});
+          res.json({ _id, username, email, vouchers });
         } else {
-          res.status(500).send('user not logged in');
+          res.status(500).send("user not logged in");
         }
       })
       .catch(error => {

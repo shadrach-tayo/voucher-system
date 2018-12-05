@@ -58,8 +58,35 @@ module.exports = app => {
       .catch(error => res.send({success: false, error}))
     })
   });
+  
+  // handle request to save multiple vouchers to database
+  app.post('/api/vouchers', (req, res) => {
+    const vouchers = req.body;
+    console.log(vouchers);
+    if(!vouchers)
+      return res.status(500)
+        .send('no vouchers sent')
+    return saveVouchers(vouchers)
+    .then(vouchers => {
+      res.json(vouchers);
+    })
+    .catch(err => {
+      res.send(err);
+      console.log(err);
+    })
+  })
+
+  // handles request to clear all available vouchers in the database
+  app.delete('/api/vouchers', (req, res) => {
+    Voucher.remove({}).then(() => {
+      res.send('success');
+    }).catch(err => res.send(err))
+  })
 }
 
+// TODO: organize util functions into modules
+
+// Uitility functions to help perform certain task
 /**
  * Save voucher object to a user's list of purchased vouchers
  * @param {Object} voucher 
@@ -92,4 +119,12 @@ function safeUserInfo(user) {
     email: user.email,
     vouchers: user.vouchers
   }
+}
+
+function saveVouchers(vouchers) {
+  return Promise.all(vouchers.map(voucher => {
+    return new Voucher(voucher)
+      .save()
+      .then(voucher => voucher);
+  }))
 }

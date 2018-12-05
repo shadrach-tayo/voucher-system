@@ -9,31 +9,38 @@ const userSchema = new Schema({
   displayName: String,
   username: String,
   password: String,
-  confirmPassword: String,
-  vouchers: [{ amount: Number, id: Number, voucherId: String, name: String }]
+  vouchers: [
+    {
+      amount: Number,
+      id: Number,
+      voucherId: String,
+      name: String,
+      imageurl: String
+    }
+  ]
 });
 
 mongoose.model("users", userSchema);
-const User = mongoose.model('users')
+const User = mongoose.model("users");
 
-userSchema.statics.authenticate = function(email, password, callback) {
-  User.findOne({ email: email }).exec(function(err, user) {
-    if (err) {
-      return callback(err);
-    } else if (!user) {
-      let err = new Error("user not found");
-      err.status = 401;
-      return callback(err);
-    }
-    bcrypt.compare(password, user.password, function(err, result) {
-      if (result === true) {
-        return callback(null, user);
-      } else {
-        return callback();
-      }
-    });
-  });
-};
+// userSchema.statics.authenticate = function(email, password, callback) {
+//   User.findOne({ email: email }).exec(function(err, user) {
+//     if (err) {
+//       return callback(err);
+//     } else if (!user) {
+//       let err = new Error("user not found");
+//       err.status = 401;
+//       return callback(err);
+//     }
+//     bcrypt.compare(password, user.password, function(err, result) {
+//       if (result === true) {
+//         return callback(null, user);
+//       } else {
+//         return callback();
+//       }
+//     });
+//   });
+// };
 
 userSchema.pre("save", function(next) {
   let user = this;
@@ -45,4 +52,3 @@ userSchema.pre("save", function(next) {
     next();
   });
 });
-
