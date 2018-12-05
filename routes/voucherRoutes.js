@@ -62,7 +62,6 @@ module.exports = app => {
   // handle request to save multiple vouchers to database
   app.post('/api/vouchers', (req, res) => {
     const vouchers = req.body;
-    console.log(vouchers);
     if(!vouchers)
       return res.status(500)
         .send('no vouchers sent')
