@@ -25,11 +25,10 @@ module.exports = app => {
 
   // Handle User Login Request
   app.post("/api/login", (req, res) => {
-    console.log("user: ", req.body);
     const { email, password } = req.body;
     if (email && password) {
       // check user in database
-      User.findOne({ email: email })
+      User.findOne({ email })
         .then(user => {
           if (!user) {
             return res.json({ success: false, message: "user not found" });
@@ -63,30 +62,33 @@ module.exports = app => {
 
   // Handle User Login Request
   app.post("/api/signup", (req, res) => {
-    console.log("user: ", req.body);
     const { username, email, password, confirmPassword } = req.body;
     if (username && email && password && confirmPassword) {
-      // save new user to database with a uuid generated _id property
-      new User({
-        _id: uuidv1(),
-        username: username,
-        password: password,
-        email: email
+      // check if there is an existing user with the same email
+        checkUser(email).then(user => {
+          if(user)
+            return res.json({ success: false, message: "email already exists" });
+          // save new user to database with a uuid generated _id property
+          new User({
+            _id: uuidv1(),
+            username,
+            password,
+            email
+          })
+          .save()
+          .then(user => {
+            req.session.userId = user._id;
+            res.json({ success: true });
+          })
+          .catch(err => {
+            console.log(err);
+            console.log("user not saved");
+            res.json({
+              success: false,
+              message: "Internal server error user not saved"
+            });
+        }) 
       })
-        .save()
-        .then(user => {
-          console.log("new user has been saved: ", user);
-          req.session.userId = user._id;
-          res.json({ success: true });
-        })
-        .catch(err => {
-          console.log(err);
-          console.log("user not saved");
-          res.json({
-            success: false,
-            message: "Internal server error user not saved"
-          });
-        });
     } else {
       console.log("user not saved");
       res.json({ success: false, message: "Fields cannot be empty" });
@@ -110,3 +112,13 @@ module.exports = app => {
       });
   });
 };
+
+async function checkUser(email) {
+  return User.findOne({ email })
+    .then(user => {
+      if (user) {
+        return user;
+      }
+      return false;
+    });
+}
