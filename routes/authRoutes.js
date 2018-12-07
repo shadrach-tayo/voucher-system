@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = mongoose.model("users");
 const uuidv1 = require("uuid/v1");
+const checkUser = require('../utils/user').checkUser
+const safeUserInfo = require('../utils/user').safeUserInfo
 
 /**
  * Module to handle authentication routing request
@@ -9,7 +11,6 @@ const uuidv1 = require("uuid/v1");
 module.exports = app => {
   // Handle User Logout Request
   app.get("/api/logout", (req, res) => {
-    console.log("logging out");
     if (req.session) {
       req.session.destroy(function(err) {
         if (err) {
@@ -82,7 +83,6 @@ module.exports = app => {
           })
           .catch(err => {
             console.log(err);
-            console.log("user not saved");
             res.json({
               success: false,
               message: "Internal server error user not saved"
@@ -90,7 +90,6 @@ module.exports = app => {
         }) 
       })
     } else {
-      console.log("user not saved");
       res.json({ success: false, message: "Fields cannot be empty" });
     }
   });
@@ -100,8 +99,7 @@ module.exports = app => {
     User.findById(req.session.userId)
       .then(user => {
         if (user) {
-          const { _id, username, email, vouchers } = user;
-          res.json({ _id, username, email, vouchers });
+          res.json(safeUserInfo(user));
         } else {
           res.status(500).send("user not logged in");
         }
@@ -113,12 +111,3 @@ module.exports = app => {
   });
 };
 
-async function checkUser(email) {
-  return User.findOne({ email })
-    .then(user => {
-      if (user) {
-        return user;
-      }
-      return false;
-    });
-}

@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Voucher = mongoose.model('vouchers');
 const User = mongoose.model('users');
+const safeUserInfo = require('../utils/user').safeUserInfo;
+const saveUserVoucher = require('../utils/user').saveUserVoucher;
+const deleteUserVoucher = require('../utils/voucher').deleteUserVoucher
+const saveVouchers = require('../utils/voucher').saveVouchers
 
 /**
  * Function defines handlers for requests related to vouchers
@@ -25,7 +29,10 @@ module.exports = app => {
         console.log('user voucher deleted: ', user);
        return res.send({success: true, user: safeUserInfo(user)});
       })
-      .catch(error => res.send({success: false, error}))
+      .catch(error => {
+        console.log(error);
+        res.send({success: false, error})
+      })
     })
   })
 
@@ -81,49 +88,4 @@ module.exports = app => {
       res.send('success');
     }).catch(err => res.send(err))
   })
-}
-
-// TODO: organize util functions into modules
-
-// Uitility functions to help perform certain task
-/**
- * Save voucher object to a user's list of purchased vouchers
- * @param {Object} voucher 
- */
-function saveUserVoucher(user, voucher) {
-  return new Promise((resolve, reject) => {
-    user.vouchers.push(voucher);
-    User.findByIdAndUpdate(user._id, user).then(user => {
-      resolve(user);
-    })
-    .catch(err => reject(err))
-  })
-}
-
-function deleteUserVoucher(user, id) {
-  return new Promise((resolve, reject) => {
-    console.log(user.vouchers, Number(id));
-    user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
-    User.findByIdAndUpdate(user._id, user)
-      .then(user => {
-        resolve(user);
-      })
-      .catch(err => reject(err))
-  })
-};
-
-function safeUserInfo(user) {
-  return {
-    username: user.username,
-    email: user.email,
-    vouchers: user.vouchers
-  }
-}
-
-function saveVouchers(vouchers) {
-  return Promise.all(vouchers.map(voucher => {
-    return new Voucher(voucher)
-      .save()
-      .then(voucher => voucher);
-  }))
 }
