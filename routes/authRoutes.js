@@ -32,7 +32,7 @@ module.exports = app => {
       User.findOne({ email })
         .then(user => {
           if (!user) {
-            return res.json({ success: false, message: "user not found" });
+            return res.json({ success: false, message: "Email not registered, sign up to continue." });
           }
           bcrypt.compare(password, user.password, function(err, result) {
             if (result === true) {
@@ -96,18 +96,22 @@ module.exports = app => {
 
   // Handle request for currently logged In user
   app.get("*/api/current_user", (req, res) => {
-    User.findById(req.session.userId)
-      .then(user => {
-        if (user) {
-          res.json(safeUserInfo(user));
-        } else {
-          res.status(500).send("user not logged in");
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        res.send("Server Error");
-      });
+    if(req.session.userId) {
+      User.findById(req.session.userId)
+        .then(user => {
+          if (user) {
+            res.json(safeUserInfo(user));
+          } else {
+            res.status(500).send("user not logged in");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          res.send("Server Error");
+        });
+    } else {
+      return res.status(204).send('not loggedIn')
+    }
   });
 };
 

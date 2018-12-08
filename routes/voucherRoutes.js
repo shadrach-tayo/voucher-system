@@ -26,7 +26,6 @@ module.exports = app => {
   app.delete('/voucher/:id', (req, res) => {
     User.findById(req.session.userId).then(user => {
       deleteUserVoucher(user, req.params.id).then((user) => {
-        console.log('user voucher deleted: ', user);
        return res.send({success: true, user: safeUserInfo(user)});
       })
       .catch(error => {

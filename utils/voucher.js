@@ -3,10 +3,10 @@ const User = mongoose.model('users');
 
 function deleteUserVoucher(user, id) {
   return new Promise((resolve, reject) => {
-    console.log(user.vouchers, Number(id));
     user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
     User.findByIdAndUpdate(user._id, user)
       .then(user => {
+        console.log('updated user', user);
         resolve(user);
       })
       .catch(err => reject(err))

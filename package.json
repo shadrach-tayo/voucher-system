@@ -9,11 +9,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "server": "nodemon index.js",
+    "dev": "nodemon index.js",
     "client": "npm run start --prefix client",
     "client-prod": "npm run build --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "prod": "concurrently \"npm start\" \"npm run client-prod\"",
     "postbuild": "npm install --prefix client && npm run build --prefix client",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
@@ -24,7 +22,6 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^3.0.0",
-    "concurrently": "4.0.1",
     "connect-mongo": "^2.0.2",
     "cors": "2.8.5",
     "express": "4.16.4",
