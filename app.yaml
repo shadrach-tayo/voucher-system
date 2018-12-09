@@ -4,4 +4,3 @@ env_variables:
   NODE_ENV: "production"
   COOKIE_KEY: "vouchersystemcookiekey"
   MONGO_URI: "mongodb://shadrach:26021999temitayo@ds027415.mlab.com:27415/voucher-pay"
-

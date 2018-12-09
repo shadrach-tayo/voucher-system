@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Voucher = mongoose.model('vouchers');
 const User = mongoose.model('users');
+const safeUserInfo = require('../utils/user').safeUserInfo;
+const saveUserVoucher = require('../utils/user').saveUserVoucher;
+const deleteUserVoucher = require('../utils/voucher').deleteUserVoucher
+const saveVouchers = require('../utils/voucher').saveVouchers
 
 /**
  * Function defines handlers for requests related to vouchers
@@ -22,10 +26,12 @@ module.exports = app => {
   app.delete('/voucher/:id', (req, res) => {
     User.findById(req.session.userId).then(user => {
       deleteUserVoucher(user, req.params.id).then((user) => {
-        console.log('user voucher deleted: ', user);
        return res.send({success: true, user: safeUserInfo(user)});
       })
-      .catch(error => res.send({success: false, error}))
+      .catch(error => {
+        console.log(error);
+        res.send({success: false, error})
+      })
     })
   })
 
@@ -58,38 +64,27 @@ module.exports = app => {
       .catch(error => res.send({success: false, error}))
     })
   });
-}
-
-/**
- * Save voucher object to a user's list of purchased vouchers
- * @param {Object} voucher 
- */
-function saveUserVoucher(user, voucher) {
-  return new Promise((resolve, reject) => {
-    user.vouchers.push(voucher);
-    User.findByIdAndUpdate(user._id, user).then(user => {
-      resolve(user);
+  
+  // handle request to save multiple vouchers to database
+  app.post('/api/vouchers', (req, res) => {
+    const vouchers = req.body;
+    if(!vouchers)
+      return res.status(500)
+        .send('no vouchers sent')
+    return saveVouchers(vouchers)
+    .then(vouchers => {
+      res.json(vouchers);
     })
-    .catch(err => reject(err))
+    .catch(err => {
+      res.send(err);
+      console.log(err);
+    })
   })
-}
 
-function deleteUserVoucher(user, id) {
-  return new Promise((resolve, reject) => {
-    console.log(user.vouchers, Number(id));
-    user.vouchers = user.vouchers.filter(voucher => voucher.id !== Number(id));
-    User.findByIdAndUpdate(user._id, user)
-      .then(user => {
-        resolve(user);
-      })
-      .catch(err => reject(err))
+  // handles request to clear all available vouchers in the database
+  app.delete('/api/vouchers', (req, res) => {
+    Voucher.remove({}).then(() => {
+      res.send('success');
+    }).catch(err => res.send(err))
   })
-};
-
-function safeUserInfo(user) {
-  return {
-    username: user.username,
-    email: user.email,
-    vouchers: user.vouchers
-  }
 }

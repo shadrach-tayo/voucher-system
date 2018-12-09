@@ -15,7 +15,6 @@ mongoose.connect(keys.mongoURI);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'))
-
 app.use(session({
   secret: keys.cookieKEY,
   resave: true,

@@ -6,7 +6,8 @@ const voucherSchema = new Schema({
   name: String,
   id: String,
   code: String,
-  price: String
+  price: String,
+  imageurl: String
 })
 
 mongoose.model('vouchers', voucherSchema);
