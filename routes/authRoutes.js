@@ -34,7 +34,7 @@ module.exports = app => {
           if (!user) {
             return res.json({ success: false, message: "user not found" });
           }
-          bcrypt.compare(password, user.password, async function(err, result) {
+          bcrypt.compare(password, user.password, function(err, result) {
             console.log('user to logIn: ', user);
             if (result === true) {
               (req.session.userId = user._id);

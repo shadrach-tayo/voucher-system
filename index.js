@@ -10,13 +10,14 @@ const cors = require("cors");
 const app = express();
 
 // connect mongoose to our mongodb instance
+console.log(keys)
 mongoose.connect(keys.mongoURI);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'))
 
 app.use(session({
-  secret: keys.cookieKey,
+  secret: keys.cookieKEY,
   resave: true,
   saveUninitialized: false,
   store: new MongoStore({

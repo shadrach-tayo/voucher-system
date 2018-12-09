@@ -4,7 +4,7 @@
   "description": "A voucher system application",
   "main": "index.js",
   "engines": {
-    "node": "10.13.0",
+    "node": "10.x.x",
     "npm": "5.5.1"
   },
   "scripts": {
@@ -23,7 +23,7 @@
   "author": "shadrach",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^3.0.0",
     "concurrently": "4.0.1",
     "connect-mongo": "^2.0.2",
     "cors": "2.8.5",
