@@ -10,7 +10,6 @@ const cors = require("cors");
 const app = express();
 
 // connect mongoose to our mongodb instance
-console.log(keys);
 mongoose.connect(keys.mongoURI);
 const db = mongoose.connection;
 
