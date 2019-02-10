@@ -17,6 +17,19 @@ const userSchema = new Schema({
       name: String,
       imageurl: String
     }
+  ],
+  cart: [
+    {
+      id: Number,
+      quantity: Number,
+      item: {
+        name: String,
+        id: String,
+        code: String,
+        price: String,
+        imageurl: String
+      }
+    }
   ]
 });
 

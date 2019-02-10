@@ -35,11 +35,10 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 } else {
-  app.use(express.static(path.join(__dirname, "client/build")));
-
-  app.get(["/", "/dashboard"], function(req, res) {
-    res.sendFile(path.join(__dirname, "client/build", "index.html"));
-  });
+  // app.use(express.static(path.join(__dirname, "..", "client/build")));
+  // app.get(["/", "/dashboard", "/cart"], function(req, res) {
+  //   res.sendFile(path.join(__dirname, "..", "client/build", "index.html"));
+  // });
 }
 
 require("./models/Voucher");
