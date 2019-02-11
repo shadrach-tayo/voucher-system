@@ -86,7 +86,7 @@ module.exports = app => {
   });
 
   // handles request to save item to cart
-  app.post("/addtocart", (req, res) => {
+  app.post("/api/addtocart", (req, res) => {
     const cartItem = req.body;
     User.findById(req.session.userId).then(user => {
       addToCart(user, cartItem).then(updatedUser => {

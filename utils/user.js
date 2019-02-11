@@ -9,7 +9,8 @@ function safeUserInfo(user) {
   return {
     username: user.username,
     email: user.email,
-    vouchers: user.vouchers
+    vouchers: user.vouchers,
+    cart: user.cart
   };
 }
 
@@ -34,13 +35,42 @@ function saveUserVoucher(user, voucher) {
  * @param {Object} cartItem
  */
 function addToCart(user, cartItem) {
-  return new Promise((res, rej) => {
-    user.cart.push(cartItem);
-    user
-      .findByIdAndUpdate(user._id, user)
-      .then(updateUser => res(user))
+  return new Promise((resolve, rej) => {
+    let itemToadd = null;
+    const itemExists = user.cart.find((val, i) => val.item.id === cartItem.id);
+    if (itemExists) {
+      let cart = [];
+      user.cart.forEach(cartItem => {
+        if (cartItem.item.id == itemExists.item.id) {
+          cartItem.quantity++;
+        }
+        cart.push(cartItem);
+      });
+
+      user.cart = cart;
+    } else {
+      itemToadd = {
+        item: cartItem,
+        quantity: getItemQuantity(user, cartItem)
+      };
+      user.cart.push(itemToadd);
+    }
+
+    User.findByIdAndUpdate(user._id, user)
+      .then(response => {
+        resolve(user);
+      })
       .catch(err => rej(err));
   });
+}
+
+function getItemQuantity(user, cartItem) {
+  return user.cart.reduce((sum, item) => {
+    if (item.item.id === cartItem.id) {
+      sum++;
+    }
+    return sum;
+  }, 1);
 }
 
 /**

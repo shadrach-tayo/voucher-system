@@ -20,7 +20,6 @@ const userSchema = new Schema({
   ],
   cart: [
     {
-      id: Number,
       quantity: Number,
       item: {
         name: String,
