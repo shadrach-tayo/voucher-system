@@ -18,9 +18,10 @@ function safeUserInfo(user) {
  * Save voucher object to a user's list of purchased vouchers
  * @param {Object} voucher
  */
-function saveUserVoucher(user, voucher) {
+function saveUserVouchers(user, vouchers) {
   return new Promise((resolve, reject) => {
-    user.vouchers.push(voucher);
+    user.vouchers = user.vouchers.concat(vouchers);
+    user.cart = [];
     User.findByIdAndUpdate(user._id, user)
       .then(user => {
         resolve(user);
@@ -89,6 +90,6 @@ function checkUser(email) {
 module.exports = {
   checkUser,
   safeUserInfo,
-  saveUserVoucher,
+  saveUserVouchers,
   addToCart
 };

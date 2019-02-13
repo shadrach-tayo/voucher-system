@@ -3,9 +3,9 @@ const Voucher = mongoose.model("vouchers");
 const User = mongoose.model("users");
 const safeUserInfo = require("../utils/user").safeUserInfo;
 const addToCart = require("../utils/user").addToCart;
-const saveUserVoucher = require("../utils/user").saveUserVoucher;
+const saveUserVouchers = require("../utils/user").saveUserVouchers;
 const deleteUserVoucher = require("../utils/voucher").deleteUserVoucher;
-const saveVouchers = require("../utils/voucher").saveVouchers;
+// const saveVouchers = require("../utils/voucher").saveVouchers;
 
 /**
  * Function defines handlers for requests related to vouchers
@@ -48,42 +48,41 @@ module.exports = app => {
 
   // handle request to save voucher under a particular user
   app.post("*/api/voucher", (req, res) => {
-    const voucher = req.body;
-    if (!voucher) {
+    const vouchers = req.body;
+    if (!vouchers) {
       return res.status(500).send("no vouchers sent");
     }
     User.findById(req.session.userId).then(user => {
-      saveUserVoucher(user, voucher)
+      saveUserVouchers(user, vouchers)
         .then(user => {
-          console.log("user voucher saved: ", user);
           return res.send({ success: true, user: safeUserInfo(user) });
         })
         .catch(error => res.send({ success: false, error }));
     });
   });
 
-  // handle request to save multiple vouchers to database
-  app.post("/api/vouchers", (req, res) => {
-    const vouchers = req.body;
-    if (!vouchers) return res.status(500).send("no vouchers sent");
-    return saveVouchers(vouchers)
-      .then(vouchers => {
-        res.json(vouchers);
-      })
-      .catch(err => {
-        res.send(err);
-        console.log(err);
-      });
-  });
+  // // handle request to save multiple vouchers to database
+  // app.post("/api/vouchers", (req, res) => {
+  //   const vouchers = req.body;
+  //   if (!vouchers) return res.status(500).send("no vouchers sent");
+  //   return saveVouchers(vouchers)
+  //     .then(vouchers => {
+  //       res.json(vouchers);
+  //     })
+  //     .catch(err => {
+  //       res.send(err);
+  //       console.log(err);
+  //     });
+  // });
 
-  // handles request to clear all available vouchers in the database
-  app.delete("/api/vouchers", (req, res) => {
-    Voucher.remove({})
-      .then(() => {
-        res.send("success");
-      })
-      .catch(err => res.send(err));
-  });
+  // // handles request to clear all available vouchers in the database
+  // app.delete("/api/vouchers", (req, res) => {
+  //   Voucher.remove({})
+  //     .then(() => {
+  //       res.send("success");
+  //     })
+  //     .catch(err => res.send(err));
+  // });
 
   // handles request to save item to cart
   app.post("/api/addtocart", (req, res) => {

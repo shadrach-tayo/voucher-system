@@ -34,11 +34,6 @@ if (process.env.NODE_ENV === "production") {
   app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
-} else {
-  // app.use(express.static(path.join(__dirname, "..", "client/build")));
-  // app.get(["/", "/dashboard", "/cart"], function(req, res) {
-  //   res.sendFile(path.join(__dirname, "..", "client/build", "index.html"));
-  // });
 }
 
 require("./models/Voucher");
@@ -46,6 +41,5 @@ require("./models/User");
 require("./routes/authRoutes")(app);
 require("./routes/voucherRoutes")(app);
 
-// Serve app {PORT} depending on the environment
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on port: ", PORT));
